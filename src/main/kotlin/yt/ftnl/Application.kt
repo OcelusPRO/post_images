@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     CONFIG = Configuration.loadConfiguration(File(if (args.isNotEmpty()) args[0] else "./config.json"))
     DBManager(CONFIG.dbConfig)
 
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+    embeddedServer(Netty, port = CONFIG.webCfg.port, host = CONFIG.webCfg.host) {
         configureRouting()
         configureSerialization()
         configureTemplating()
