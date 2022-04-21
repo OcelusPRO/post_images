@@ -11,6 +11,7 @@ import java.io.File
  */
 data class Configuration(
     val dbConfig: DatabaseConfig = DatabaseConfig(),
+    val webCfg: WebConfig = WebConfig()
 ) {
     /**
      * Exception if error occurs while loading configuration file.
@@ -37,6 +38,13 @@ data class Configuration(
         val user: String = "",
         val password: String = "",
         val database: String = "",
+    )
+
+    data class WebConfig(
+        val port: Int = 8080,
+        val host: String = "0.0.0.0",
+        val secretSignKey: String = "",
+        val secretEncryptKey: String = ""
     )
 
     companion object {
