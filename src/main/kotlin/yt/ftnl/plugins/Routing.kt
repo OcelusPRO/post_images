@@ -1,13 +1,11 @@
 package yt.ftnl.plugins
 
 import io.ktor.server.routing.*
-import io.ktor.http.*
 import io.ktor.server.http.content.*
-import io.ktor.server.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.response.*
-import io.ktor.server.request.*
+import java.io.File
 
 /**
  * Manage routes
@@ -21,7 +19,9 @@ fun Application.configureRouting() {
         }
 
         static("/static") {
-            resources("static")
+            val staticFile = File("./static")
+            staticFile.mkdirs()
+            staticRootFolder = staticFile
         }
     }
 }
