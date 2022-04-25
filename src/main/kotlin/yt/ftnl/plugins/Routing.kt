@@ -62,7 +62,7 @@ fun Application.configureRouting() {
         static("/static") {
             val staticFile = File("./static")
             staticFile.mkdirs()
-            staticRootFolder = staticFile
+            files(staticFile.path)
         }
     }
 }
