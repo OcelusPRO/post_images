@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>FTNL_YT</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<body style="background: #0e0e10;">
+    <div class="col">
+        <div class="d-xxl-flex flex-row justify-content-xxl-start align-items-xxl-center" style="height: 103px;color: rgb(33, 37, 41);background: #18181B;">
+            <div class="row">
+                <div class="col"><img height="103px" width="103px" src="/assets/img/ftnl_cls.png"></div>
+                <div class="col d-xxl-flex justify-content-xxl-center align-items-xxl-center">
+                    <h1 style="color: #F6F6F6;">FTNL</h1>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex float-start flex-row justify-content-xxl-center align-items-xxl-center" style="height: 89vh;width: 100%;">
+            <div class="row" style="width: 95%;border-style: none;">
+                <div class="col" style="width: 70%;min-width: 100vh;max-width: 100%;border-style: none;">
+                    <div class="d-flex d-xxl-flex flex-column justify-content-xxl-center align-items-xxl-center" style="height: 80vh;background: #18181B;border-radius: 18px;margin: 1%;">
+                        <img class="d-block" src="/file/{{iname}}" loading="lazy" style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;">
+                    </div>
+                </div>
+                <div class="col" style="width: 100%;min-width: 55vh;max-width: 100%;border-style: none;">
+                    <div class="d-flex d-xxl-flex flex-column justify-content-xxl-end align-items-xxl-center" style="height: 80vh;background: #18181B;border-radius: 18px;margin: 1%;">
+                        <div class="flex-column m-auto justify-content-xxl-center align-items-xxl-center" style="height: 100%;width: 92%;padding-top: 3%;color: #F6F6F6;">
+                            <h1 class="fw-bold text-center" style="color: #F6F6F6;">{{iname}}</h1>
+                            <hr style="background: #0E0E10;width: 95%;">
+                            <div>
+                                <h2 class="text-center" style="margin-bottom: 2%;">Informations sur le staff&nbsp;:<br></h2>
+                                <h4 class="text-center"><i class="far fa-user"></i>&nbsp;Nom : {{NAME}}</h4>
+                                <h4 class="text-center"><i class="far fa-id-card"></i>&nbsp;ID : {{ID}}</h4>
+                                <h4 class="text-center"><i class="far fa-gem"></i>&nbsp;Grade : {{GRADE}}</h4>
+                                <h4 class="text-center"><i class="far fa-check-circle"></i>&nbsp;Statut : {{STATE}}</h4>
+                            </div>
+                            <div>
+                                <h2 class="text-center" style="margin-bottom: 2%;">Informations sur l'image :<br></h2>
+                                <h4 class="text-center"><i class="far fa-calendar-alt"></i>&nbsp;Date : {{DATE}}</h4>
+                                <h4 class="text-center"><i class="far fa-file-image"></i>&nbsp;Type : {{TYPE}}</h4>
+                            </div>
+                        </div>
+                        <div  {{^isManagable}} style="display: none" {{/isManagable}} >
+                            <hr style="background: #0E0E10;width: 95%;">
+                            <div class="d-flex justify-content-xxl-center align-items-xxl-center" style="width: 30%;">
+                                <a href="/file/{{iname}}/delete">
+                                    <div class="d-flex d-xxl-flex m-auto justify-content-xxl-center align-items-xxl-center" style="width: 5vh;height: 5vh;background: rgb(255,15,0);border-radius: 10px;text-align: center;font-size: 38px;"><i class="far fa-trash-alt" style="color: #F6F6F6;"></i></div>
+                                </a>
+                            </div>
+                            <hr style="background: #0E0E10;width: 95%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
