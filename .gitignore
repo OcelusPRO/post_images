@@ -34,3 +34,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Others ###
+uploads/
+config.json
+.sessions/
