@@ -44,7 +44,8 @@ data class Configuration(
         val port: Int = 8080,
         val host: String = "0.0.0.0",
         val secretSignKey: String = "",
-        val secretEncryptKey: String = ""
+        val secretEncryptKey: String = "",
+        val serverAdress: String = "http://localhost:$port"
     )
 
     companion object {
