@@ -3,8 +3,8 @@ package yt.ftnl.core.database
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import yt.ftnl.CONFIG
 import yt.ftnl.core.Configuration
+import yt.ftnl.core.database.structures.Users
 
 /**
  * Initializes the database.
@@ -24,7 +24,7 @@ class DBManager(private val conf: Configuration.DatabaseConfig) {
         transaction {
             // Init tables, create missing columns
             SchemaUtils.createMissingTablesAndColumns(
-
+                Users
             )
         }
     }
