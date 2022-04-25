@@ -22,9 +22,9 @@ fun main(args: Array<String>) {
 
     embeddedServer(Netty, port = CONFIG.webCfg.port, host = CONFIG.webCfg.host) {
         configureRouting()
-        configureSerialization()
         configureTemplating()
-        configureHTTP()
         configureSecurity()
+        configureSerialization()
+        configureHTTP()
     }.start(wait = true)
 }
