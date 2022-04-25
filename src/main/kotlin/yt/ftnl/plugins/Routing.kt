@@ -56,7 +56,7 @@ fun Application.configureRouting() {
         }
 
         get("/") {
-            call.respondText("Hello World!")
+            call.respond(MustacheContent("index.hbs", mapOf("" to "")))
         }
 
         static("/static") {
