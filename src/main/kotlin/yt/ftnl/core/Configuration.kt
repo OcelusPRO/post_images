@@ -8,6 +8,7 @@ import java.io.File
  * Configuration class.
  *
  * @property dbConfig Database configuration.
+ * @property webCfg Web configuration.
  */
 data class Configuration(
     val dbConfig: DatabaseConfig = DatabaseConfig(),
@@ -40,12 +41,20 @@ data class Configuration(
         val database: String = "",
     )
 
+    /**
+     * Web configuration.
+     * @property port Web port.
+     * @property host Web host.
+     * @property secretSignKey Secret sign key.
+     * @property secretEncryptKey Secret encrypt key.
+     * @property serverAddress Server address.
+     */
     data class WebConfig(
         val port: Int = 8080,
         val host: String = "0.0.0.0",
         val secretSignKey: String = "",
         val secretEncryptKey: String = "",
-        val serverAdress: String = "http://localhost:$port"
+        val serverAddress: String = "http://localhost:$port"
     )
 
     companion object {

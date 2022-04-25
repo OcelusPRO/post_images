@@ -76,7 +76,6 @@ data class User(
      * @property rLevel The user's rank level.
      * @property service user service state
      * @property srv_state The user's service state.
-     * @property lastLogin The last login date
      * @property lastRefresh The last data refresh
      */
     data class SessionUser(
@@ -87,13 +86,8 @@ data class User(
         var rLevel: Int,
         var service: String,
         var srv_state: Boolean,
-        var lastLogin: Long = System.currentTimeMillis(),
         var lastRefresh: Long = System.currentTimeMillis()
     ): Principal {
-        /**
-         * get last user login
-         */
-        fun updateLastLogin() { lastLogin = System.currentTimeMillis() }
 
         /**
          * Update last data refresh
