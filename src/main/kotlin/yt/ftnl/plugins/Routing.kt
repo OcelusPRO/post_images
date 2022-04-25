@@ -59,8 +59,83 @@ fun Application.configureRouting() {
             call.respond(MustacheContent("index.hbs", mapOf("" to "")))
         }
 
-        static("/static") {
-            val staticFile = File("./static")
+        get("/login") {
+            call.respond(MustacheContent("login.hbs", mapOf("" to null)))
+        }
+
+        authenticate("auth-form") {
+            post("/login") {
+                call.sessions.set(call.principal<User.SessionUser>())
+                call.respondRedirect("/gallery")
+            }
+        }
+
+        authenticate("auth-session") {
+            get("/file/{id}/delete") {
+                val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
+                val file = File("./uploads/$id")
+
+                val data = getImageData(id, call.principal())
+                if(!(data.containsKey("isManagable") && data["isManagable"] as Boolean)){
+                    if((call.principal<User.SessionUser>()?.rLevel ?: 0) < 4)
+                        return@get call.respond(HttpStatusCode.Forbidden, "You don't have permission to delete this file")
+                }
+
+                if (file.exists()) file.delete()
+                call.respondRedirect("/gallery")
+            }
+
+            get("/gallery"){
+                call.respond(MustacheContent("gallery.hbs", mapOf("" to "")))
+            }
+        }
+
+        authenticate("auth-basic") {
+            post("/upload") {
+                val authHeader = call.request.headers["Authorization"] ?: return@post call.respond(HttpStatusCode.Unauthorized, "No authorization header")
+                val loginHeader = call.request.headers["login"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Missing login header")
+                val user = User.getByDid(loginHeader) ?: return@post call.respond(HttpStatusCode.BadRequest, "Invalid login header")
+
+                if(user.password != authHeader.hash("SHA-256")) return@post call.respond(HttpStatusCode.Unauthorized, "Invalid authorization header")
+
+                val multipart = call.receiveMultipart()
+                multipart.forEachPart { part ->
+                    println(part.name)
+                    if(part is PartData.FileItem) {
+                        val name = part.originalFileName!!
+                        val file = File("./uploads/1_${System.currentTimeMillis()}.${name}")
+                        part.streamProvider().use { its ->
+                            file.outputStream().buffered().use { its.copyTo(it) }
+                        }
+                    }
+                    part.dispose()
+                }
+                call.respond("Ok")
+            }
+        }
+
+        get("/{id}") {
+            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
+            val result = MustacheContent("image.hbs", mapOf("iname" to id))
+            call.respond(result)
+        }
+
+        get("/file/{id}"){
+            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
+            val file = File("./uploads/$id")
+            if(!file.exists()) return@get call.respond(HttpStatusCode.NotFound, "File not found")
+            call.respondFile(file)
+        }
+
+        get("/i/{id}"){
+            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
+            val imgData = getImageData(id, call.sessions.get())
+            if(!File("./uploads/$id").exists()) return@get call.respond(HttpStatusCode.NotFound, "File not found")
+            call.respond(MustacheContent("ImageView.hbs", imgData))
+        }
+
+        static("/") {
+            val staticFile = File("./static/")
             staticFile.mkdirs()
             files(staticFile.path)
         }
