@@ -2,7 +2,10 @@ plugins {
     kotlin("jvm") version "1.6.10"
 }
 
-val ktor_version = "2.0.0"
+/**
+ * Ktor version
+ */
+val ktorVersion = "2.0.0"
 
 group = "yt.ftnl"
 version = "0.0.1"
@@ -12,21 +15,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-serialization-gson-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-mustache-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-http-redirect-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-hsts-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-default-headers-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-compression-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-caching-headers-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-auto-head-response-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-sessions-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("io.ktor:ktor-serialization-gson-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-mustache-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-http-redirect-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-hsts-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-default-headers-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-cors-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-compression-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-caching-headers-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-host-common-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-auto-head-response-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-sessions-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth:$ktorVersion")
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     
@@ -37,6 +40,6 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.28")
     
     
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.20")
 }
