@@ -16,13 +16,11 @@ class DBManager(private val conf: Configuration.DatabaseConfig) {
     init {
         Database.connect(
             url = "jdbc:mysql://${conf.host}:${conf.port}/${conf.database}?useSSL=false",
-            //driver = "com.mysql.cj.jdbc.Driver",
             user = conf.user,
             password = conf.password,
         )
 
         transaction {
-            // Init tables, create missing columns
             SchemaUtils.createMissingTablesAndColumns(
                 Users
             )
