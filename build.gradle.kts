@@ -1,5 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    application
 }
 
 /**
@@ -9,6 +13,9 @@ val ktorVersion = "2.0.0"
 
 group = "yt.ftnl"
 version = "0.0.1"
+application {
+    mainClass.set("yt.ftnl.ApplicationKt")
+}
 
 repositories {
     mavenCentral()
@@ -22,7 +29,6 @@ dependencies {
     implementation("io.ktor:ktor-server-http-redirect-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-hsts-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-default-headers-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-cors-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-compression-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-caching-headers-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-host-common-jvm:$ktorVersion")
@@ -33,13 +39,32 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     
-    implementation("org.jetbrains.exposed:exposed-jodatime:0.37.3")
-    implementation("org.jetbrains.exposed:exposed-core:0.37.3")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.37.3")
-    implementation("org.jetbrains.exposed:exposed-dao:0.37.3")
+    implementation("org.jetbrains.exposed:exposed-jodatime:0.38.2")
+    implementation("org.jetbrains.exposed:exposed-core:0.38.2")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.38.2")
+    implementation("org.jetbrains.exposed:exposed-dao:0.38.2")
     implementation("mysql:mysql-connector-java:8.0.28")
     
     
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.20")
+}
+
+
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("FPostImage")
+        mergeServiceFiles()
+        minimize()
+        archiveClassifier.set("min")
+        manifest {
+            attributes(mapOf("Main-Class" to "yt.ftnl.ApplicationKt"))
+        }
+    }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
 }
