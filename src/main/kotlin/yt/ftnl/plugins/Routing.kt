@@ -92,18 +92,13 @@ fun Application.configureRouting() {
 
         authenticate("auth-basic") {
             post("/upload") {
-                val authHeader = call.request.headers["Authorization"] ?: return@post call.respond(HttpStatusCode.Unauthorized, "No authorization header")
-                val loginHeader = call.request.headers["login"] ?: return@post call.respond(HttpStatusCode.BadRequest, "Missing login header")
-                val user = User.getByDid(loginHeader) ?: return@post call.respond(HttpStatusCode.BadRequest, "Invalid login header")
-
-                if(user.password != authHeader.hash("SHA-256")) return@post call.respond(HttpStatusCode.Unauthorized, "Invalid authorization header")
-
+                val user: User.SessionUser = call.principal() ?: return@post call.respond(HttpStatusCode.Forbidden, "You must be logged in to upload")
                 val multipart = call.receiveMultipart()
                 multipart.forEachPart { part ->
                     println(part.name)
                     if(part is PartData.FileItem) {
                         val name = part.originalFileName!!
-                        val file = File("./uploads/1_${System.currentTimeMillis()}.${name}")
+                        val file = File("./uploads/${user.id}_${System.currentTimeMillis()}.$name")
                         part.streamProvider().use { its ->
                             file.outputStream().buffered().use { its.copyTo(it) }
                         }
