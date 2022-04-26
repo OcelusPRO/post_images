@@ -18,7 +18,7 @@ et par authentification basic pour la reception de nouvelles images par l'API
 passer par la route de l'API)*
 
 Refonte globale du front affin de rester sur un thème sobre 
-*(et surtout un thème dark pour éviter [ça](https://ftnl.yt/))*
+*(et surtout un thème dark pour éviter [ça](https://freezlex.com/flashbang))*
 
 
 ## Installation
