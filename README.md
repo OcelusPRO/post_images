@@ -32,5 +32,5 @@ Refonte globale du front affin de rester sur un thème sobre
 
 ## Prérequis : 
 
-- Base de donnée mysql *(les tables seront automatiquement générées)*
+- Base de donnée mysql/mariadb *(les tables seront automatiquement générées)*
 - Java
