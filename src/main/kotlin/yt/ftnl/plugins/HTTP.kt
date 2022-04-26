@@ -33,13 +33,13 @@ fun Application.configureHTTP() {
             matchContentType(ContentType.Text.Any)
             priority = 0.9
             minimumSize(1024)
-            condition { request.headers[HttpHeaders.Referrer]?.startsWith(CONFIG.webCfg.serverAdress) == true }
+            condition { request.headers[HttpHeaders.Referrer]?.startsWith(CONFIG.webCfg.serverAddress) == true }
         }
         deflate {
             matchContentType(ContentType.Text.Any)
             priority = 1.0
             minimumSize(1024)
-            condition { request.headers[HttpHeaders.Referrer]?.startsWith(CONFIG.webCfg.serverAdress) == true }
+            condition { request.headers[HttpHeaders.Referrer]?.startsWith(CONFIG.webCfg.serverAddress) == true }
         }
     }
     install(CachingHeaders) {
