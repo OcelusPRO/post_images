@@ -1,5 +1,6 @@
 package yt.ftnl.plugins
 
+import com.google.gson.Gson
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -11,8 +12,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import yt.ftnl.CONFIG
 import yt.ftnl.core.database.structures.User
-import yt.ftnl.core.hash
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,18 +25,21 @@ fun Application.configureRouting() {
     install(AutoHeadResponse)
 
     routing {
+        fun checkId(id: String?): List<String>? {
+            val e = id?.split("_")
+            return if (e?.size != 2) null else e
+        }
         fun getImageData(imgName: String, session: User.SessionUser?): Map<String, Any?> {
             val regex = Regex("^(\\d+)_(\\d+)\\.(\\w+)$")
             regex.matchEntire(imgName) ?: return mapOf("error" to "Invalid image name")
-
-            val args = imgName.split("_")
-            val staffId = args[0].toIntOrNull() ?: 0
-            val fileData = args[1].split(".")
+            val (u, i) = checkId(imgName) ?: return mapOf("error" to "Invalid image name")
+            val staffId = u.toIntOrNull() ?: 0
+            val fileData = i.split(".")
             val date = fileData[0].toLongOrNull() ?: 0
             val sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
             val netDate = Date(date)
             val ext = fileData[1]
-            val staff = User.getByUid(staffId)
+            val staff = if (session?.id != staffId) User.getByUid(staffId)?.toSessionUser() else session
 
             var managable = false
             if (session != null) {
@@ -73,7 +77,8 @@ fun Application.configureRouting() {
         authenticate("auth-session") {
             get("/file/{id}/delete") {
                 val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
-                val file = File("./uploads/$id")
+                val (u, i) = checkId(id) ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid id parameter")
+                val file = File("./uploads/$u/$i")
 
                 val data = getImageData(id, call.principal())
                 if(!(data.containsKey("isManagable") && data["isManagable"] as Boolean)){
@@ -82,11 +87,19 @@ fun Application.configureRouting() {
                 }
 
                 if (file.exists()) file.delete()
-                call.respondRedirect("/gallery")
+                call.respondRedirect("/gallery?withDeleted=$id")
             }
 
             get("/gallery"){
-                call.respond(MustacheContent("gallery.hbs", mapOf("" to "")))
+                val query = call.request.queryParameters["withDeleted"]
+                val session = call.principal<User.SessionUser>() ?: return@get call.respond(HttpStatusCode.Unauthorized, "You must be logged in to view this page")
+                val userFolder = File("./uploads/${session.id}")
+                userFolder.mkdirs()
+                var images = userFolder.listFiles()?.map { "${session.id}_${it.name}" } ?: listOf()
+
+                if (query != null) images = images.filter { it != query }
+
+                call.respond(MustacheContent("gallery.hbs", mapOf("images" to Gson().toJson(images))))
             }
         }
 
@@ -94,38 +107,43 @@ fun Application.configureRouting() {
             post("/upload") {
                 val user: User.SessionUser = call.principal() ?: return@post call.respond(HttpStatusCode.Forbidden, "You must be logged in to upload")
                 val multipart = call.receiveMultipart()
+                val time = System.currentTimeMillis()
+
                 multipart.forEachPart { part ->
-                    println(part.name)
                     if(part is PartData.FileItem) {
-                        val name = part.originalFileName!!
-                        val file = File("./uploads/${user.id}_${System.currentTimeMillis()}.$name")
+                        val name = part.originalFileName!!.split(".").last()
+                        File("./uploads/${user.id}").mkdirs()
+                        val file = File("./uploads/${user.id}/$time.$name")
                         part.streamProvider().use { its ->
                             file.outputStream().buffered().use { its.copyTo(it) }
                         }
+                        call.respond( "${CONFIG.webCfg.serverAddress}/${user.id}_$time.$name")
                     }
                     part.dispose()
                 }
-                call.respond("Ok")
             }
         }
 
+
         get("/{id}") {
-            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
+            val id = checkId(call.parameters["id"]) ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
             val result = MustacheContent("image.hbs", mapOf("iname" to id))
             call.respond(result)
         }
 
         get("/file/{id}"){
-            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
-            val file = File("./uploads/$id")
+            val id = checkId(call.parameters["id"]) ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing or invalid id parameter")
+            val (u, i) = id
+            val file = File("./uploads/$u/$i")
             if(!file.exists()) return@get call.respond(HttpStatusCode.NotFound, "File not found")
             call.respondFile(file)
         }
 
         get("/i/{id}"){
-            val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
-            val imgData = getImageData(id, call.sessions.get())
-            if(!File("./uploads/$id").exists()) return@get call.respond(HttpStatusCode.NotFound, "File not found")
+            val id = checkId(call.parameters["id"]) ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing or invalid id parameter")
+            val (u, i) = id
+            val imgData = getImageData(id.joinToString("_"), call.sessions.get())
+            if(!File("./uploads/$u/$i").exists()) return@get call.respond(HttpStatusCode.NotFound, "File not found")
             call.respond(MustacheContent("ImageView.hbs", imgData))
         }
 
