@@ -17,6 +17,26 @@ lateinit var CONFIG: Configuration
  * *Mon IDE me tape si je met pas la doc Kappa*
  */
 fun main(args: Array<String>) {
+
+    val noSortedFolder = File("./uploads/no-sorted")
+    if(noSortedFolder.exists()){
+        val regex = Regex("^(\\d+)_(\\d+)\\.(\\w+)$")
+        noSortedFolder.listFiles()?.forEach {
+            if (it.name.matches(regex)) {
+                val name = it.name.split("_")
+                var success = false
+                try {
+                    File("./uploads/${name[0]}").mkdirs()
+                    val f =  File("./uploads/${name[0]}/${name[1]}")
+                    it.copyTo(f)
+                    success = true
+                }catch (e: Exception){ println(e.message) }
+                if (success) it.delete()
+            }
+        }
+    }
+
+
     CONFIG = Configuration.loadConfiguration(File(if (args.isNotEmpty()) args[0] else "./config.json"))
     DBManager(CONFIG.dbConfig)
 
