@@ -74,7 +74,9 @@
                 const img = document.createElement("img");
                 img.src = `/file/${imgName}`;
                 img.style.maxWidth = "100%";
+                img.style.maxHeight = "100%";
                 img.style.width = "100%";
+                img.loading = "lazy";
                 inColTemplate.appendChild(img);
 
                 const h2 = document.createElement("h2");
