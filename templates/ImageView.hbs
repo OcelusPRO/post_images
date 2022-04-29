@@ -24,7 +24,7 @@
             <div class="row" style="width: 95%;border-style: none;">
                 <div class="col" style="width: 70%;min-width: 100vh;max-width: 100%;border-style: none;">
                     <div class="d-flex d-xxl-flex flex-column justify-content-xxl-center align-items-xxl-center" style="height: 80vh;background: #18181B;border-radius: 18px;margin: 1%;">
-                        <img class="d-block" src="/file/{{iname}}" loading="lazy" style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;">
+                        <img class="d-block" src="/{{iname}}" loading="lazy" style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;">
                     </div>
                 </div>
                 <div class="col" style="width: 100%;min-width: 55vh;max-width: 100%;border-style: none;">
@@ -48,7 +48,7 @@
                         <div  {{^isManagable}} style="display: none" {{/isManagable}} >
                             <hr style="background: #0E0E10;width: 95%;">
                             <div class="d-flex justify-content-xxl-center align-items-xxl-center" style="width: 30%;">
-                                <a href="/file/{{iname}}/delete">
+                                <a href="/{{iname}}/delete">
                                     <div class="d-flex d-xxl-flex m-auto justify-content-xxl-center align-items-xxl-center" style="width: 5vh;height: 5vh;background: rgb(255,15,0);border-radius: 10px;text-align: center;font-size: 38px;"><i class="far fa-trash-alt" style="color: #F6F6F6;"></i></div>
                                 </a>
                             </div>
