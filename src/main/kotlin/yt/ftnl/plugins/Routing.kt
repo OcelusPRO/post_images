@@ -126,9 +126,13 @@ fun Application.configureRouting() {
 
 
         get("/{id}") {
-            val id = checkId(call.parameters["id"]) ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id parameter")
-            val result = MustacheContent("image.hbs", mapOf("iname" to id))
-            call.respond(result)
+            val id = checkId(call.parameters["id"]) ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing or invalid id parameter")
+            val query = call.request.queryParameters["noReload"]?.equals("true", true) ?: false
+            val (u, i) = id
+            val file = File("./uploads/$u/$i")
+            if(!file.exists()) return@get call.respond(HttpStatusCode.NotFound, "File not found")
+            if (!query) call.response.headers.append("Refresh", "0;url=/i/${u}_$i")
+            call.respondFile(file)
         }
 
         get("/i/{id}"){
