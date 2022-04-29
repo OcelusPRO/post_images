@@ -55,8 +55,7 @@ tasks {
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set("FPostImage")
         mergeServiceFiles()
-        minimize()
-        archiveClassifier.set("min")
+        archiveClassifier.set("")
         manifest {
             attributes(mapOf("Main-Class" to "yt.ftnl.ApplicationKt"))
         }
