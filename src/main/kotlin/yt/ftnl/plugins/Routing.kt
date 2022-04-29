@@ -36,7 +36,7 @@ fun Application.configureRouting() {
             val staffId = u.toIntOrNull() ?: 0
             val fileData = i.split(".")
             val date = fileData[0].toLongOrNull() ?: 0
-            val sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
             val netDate = Date(date)
             val ext = fileData[1]
             val staff = if (session?.id != staffId) User.getByUid(staffId)?.toSessionUser() else session
