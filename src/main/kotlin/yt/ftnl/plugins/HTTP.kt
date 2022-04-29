@@ -7,7 +7,6 @@ import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.hsts.*
-import io.ktor.server.plugins.httpsredirect.*
 import yt.ftnl.CONFIG
 
 /**
@@ -18,10 +17,12 @@ fun Application.configureHTTP() {
         includeSubDomains = true
         maxAgeInSeconds = 10
     }
-*/
+
     install(DefaultHeaders) {
         header("Made-By", "OcelusPRO")
-        header(HttpHeaders.Server, "Kotlin Server")
+        header("Content-Security-Policy", "script-src 'self'")
+        header("X-Frame-Options", "SAMEORIGIN")
+        header("X-Content-Type-Options", "nosniff")
     }
 
     install(Compression) {
