@@ -83,6 +83,8 @@ fun Application.configureSecurity() {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 60 * 24 * 30 // 30 days
             cookie.extensions["SameSite"] = "lax"
+            cookie.secure = true
+            cookie.httpOnly = true
             transform(SessionTransportTransformerEncrypt(secretEncryptKey, secretSignKey))
         }
     }
