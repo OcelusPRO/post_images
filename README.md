@@ -20,6 +20,10 @@ passer par la route de l'API)*
 Refonte globale du front affin de rester sur un thème sobre 
 *(et surtout un thème dark pour éviter [ça](https://freezlex.com/flashbang))*
 
+## Prérequis :
+
+- Base de donnée mysql/mariadb *(les tables et colonnes seront automatiquement générées)*
+- Java 16
 
 ## Installation
 
@@ -30,7 +34,17 @@ Refonte globale du front affin de rester sur un thème sobre
 3. Repérez le fichier de configuration qui ce sera générer à la racine du projet et complétez le
 4. Répétez l'étape 2
 
-## Prérequis : 
+## Migré depuis [l'ancienne version](https://github.com/OcelusPRO/post_images/tree/Archives_JS-Express)
 
-- Base de donnée mysql/mariadb *(les tables seront automatiquement générées)*
-- Java
+Si vous voulez migrer depuis la version javascript de ce serveur d'envoi d'images, 
+suivez les étapes d'installation décrite ci-dessus jusqu'a l'étape 3 *(inclus)*
+
+Déplacez ensuite l'ensemble de vos images du dossier `/uploads/` vers `/uploads/no-sorted/`.
+Continuez ensuite les étapes d'installations normales.
+
+## SSL
+
+Pour fonctionner l'application a besoin d'un certificat SSL, ce dernier est enregistré dans un KeyStore 
+(par default `keystore.jks`) 
+Si le fichier n'existe pas OU que la date de fin du certificat est dépassé, l'application génèrera automatiquement
+un nouveau certificat (autosigné) d'une validité de 3 jours.
