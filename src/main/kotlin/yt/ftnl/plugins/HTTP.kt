@@ -6,13 +6,22 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.forwardedheaders.*
 import io.ktor.server.plugins.hsts.*
+import io.ktor.server.plugins.httpsredirect.*
 import yt.ftnl.CONFIG
 
 /**
  * Configure base HTTP server
  */
 fun Application.configureHTTP() {
+    install(ForwardedHeaders)
+
+    install(HttpsRedirect){
+        sslPort = CONFIG.webCfg.sslConfig.securePort
+        permanentRedirect = true
+    }
+
     install(HSTS) {
         includeSubDomains = true
         maxAgeInSeconds = 10
