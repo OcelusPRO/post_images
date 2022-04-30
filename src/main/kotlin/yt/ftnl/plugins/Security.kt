@@ -9,28 +9,29 @@ import yt.ftnl.CONFIG
 import yt.ftnl.core.database.structures.User
 import yt.ftnl.core.hash
 import java.io.File
-import java.util.*
+import java.security.MessageDigest
 
 /**
  * Manage security
  */
 fun Application.configureSecurity() {
-    fun hash(str: String): Long {
-        var h = 654321657L
-        val len: Int = str.length
-        for (i in 0 until len) {
-            h = 31 * h + str[i].code
+
+    fun hash(algo: String, seed: String): ByteArray {
+        val sha = MessageDigest.getInstance(algo)
+        return sha.digest(seed.toByteArray())
+    }
+
+    fun generateHex(seed: String): String {
+        val b = hash("SHA-512", seed)
+        val hexDigits : List<Char> = ('a'..'f') + ('0'..'9')
+        val buffer = StringBuffer()
+        for (j in b.indices) {
+            buffer.append(hexDigits[b[j].toInt() shr 4 and 0x0f])
+            buffer.append(hexDigits[b[j].toInt() and 0x0f])
         }
-        return h
+        return buffer.toString()
     }
-    fun generateHex(seed: String): String{
-        val random = Random(hash(seed))
-        val charPool : List<Char> = ('a'..'f') + ('0'..'9')
-        return (1..32)
-            .map { random.nextInt(charPool.size) }
-            .map(charPool::get)
-            .joinToString("")
-    }
+
 
     install(Authentication) {
 
