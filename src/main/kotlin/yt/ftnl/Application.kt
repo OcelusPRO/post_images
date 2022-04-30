@@ -9,9 +9,7 @@ import yt.ftnl.core.Configuration
 import yt.ftnl.core.database.DBManager
 import yt.ftnl.plugins.*
 import java.io.File
-import java.security.KeyPairGenerator
 import java.security.KeyStore
-import java.security.Signature
 import java.security.cert.X509Certificate
 import java.util.*
 
@@ -52,8 +50,8 @@ fun main(args: Array<String>) {
     var keyStore = if (keyStoreFile.exists()) {
         val store = KeyStore.getInstance(KeyStore.getDefaultType())!!
         store.load(keyStoreFile.inputStream(), CONFIG.webCfg.sslConfig.keyStorePassword.toCharArray())
-        val cert = store.getCertificate(CONFIG.webCfg.sslConfig.keyAlias) as X509Certificate
-        if (cert.notAfter.before(Date())) null else  store
+        val cert = store.getCertificate(CONFIG.webCfg.sslConfig.keyAlias) as? X509Certificate
+        if (cert?.notAfter?.after(Date()) == false) null else store
     } else null
 
     keyStore = keyStore ?: generateCertificate(
@@ -62,11 +60,6 @@ fun main(args: Array<String>) {
         keyPassword = CONFIG.webCfg.sslConfig.keyPassword,
         jksPassword = CONFIG.webCfg.sslConfig.keyStorePassword
     )
-
-    val keys = KeyPairGenerator.getInstance("SHA-256").generateKeyPair()
-    val sign = Signature.getInstance("SHA-256")
-    sign.initSign(keys.private)
-
 
     val environment = applicationEngineEnvironment {
         log = LoggerFactory.getLogger("ktor.application")
