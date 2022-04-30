@@ -47,6 +47,7 @@ data class Configuration(
      * @property host Web host.
      * @property secretSignKey Secret sign key.
      * @property secretEncryptKey Secret encrypt key.
+     * @property sslConfig Ssl configuration
      * @property serverAddress Server address.
      */
     data class WebConfig(
@@ -54,7 +55,24 @@ data class Configuration(
         val host: String = "0.0.0.0",
         val secretSignKey: String = "",
         val secretEncryptKey: String = "",
-        val serverAddress: String = "http://localhost:$port"
+        val sslConfig: SslConfig = SslConfig(),
+        val serverAddress: String = "https://localhost:${sslConfig.securePort}",
+    )
+
+    /**
+     * Ssl configuration
+     * @property securePort ssl port
+     * @property keystorePath path to keystore
+     * @property keyAlias key name
+     * @property keyPassword key password
+     * @property keyStorePassword keyStore password
+     */
+    data class SslConfig(
+        val securePort: Int = 8443,
+        val keystorePath: String = "./keystore.jks",
+        val keyAlias: String = "keyAlias",
+        val keyPassword: String = "foobar",
+        val keyStorePassword: String = "foobar"
     )
 
     companion object {
