@@ -77,10 +77,13 @@ fun Application.configureSecurity() {
 
 
     install(Sessions) {
+        val sessionFile = File(".sessions")
+        sessionFile.mkdirs()
+
         val secretEncryptKey = hex(generateHex(CONFIG.webCfg.secretEncryptKey))
         val secretSignKey = hex(generateHex(CONFIG.webCfg.secretSignKey))
 
-        cookie<User.SessionUser>("fpi_session", directorySessionStorage(File(".sessions"))) {
+        cookie<User.SessionUser>("fpi_session", directorySessionStorage(sessionFile)) {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 60 * 24 * 30 // 30 days
             cookie.extensions["SameSite"] = "lax"
