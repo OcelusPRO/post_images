@@ -36,6 +36,9 @@ dependencies {
     implementation("io.ktor:ktor-server-sessions-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
+    implementation("io.ktor:ktor-server-forwarded-header:$ktorVersion")
+    implementation("io.ktor:ktor-network-tls-certificates:$ktorVersion")
+
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     
@@ -47,7 +50,7 @@ dependencies {
     
     
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.20")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.21")
 }
 
 
